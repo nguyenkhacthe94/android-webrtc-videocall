@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">VideoCall</string>
+    <string name="enter_a_username">Enter a username</string>
+    <string name="login">Login</string>
+    <string name="accept_call">Accept the call</string>
+    <string name="reject_call">Reject the call</string>
+    <string name="call_select">Who do you want to call?</string>
+    <string name="call_btn">Call</string>
+</resources>
