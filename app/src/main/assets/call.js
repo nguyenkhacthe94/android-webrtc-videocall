@@ -20,7 +20,7 @@ function init(userId) {
     });
 
     peer.on('open', () => {
-
+        Android.onPeerConnected()
     })
 
     listen();

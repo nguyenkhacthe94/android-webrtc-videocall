@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "108563643115",
-    "project_id": "webrtc-hbs",
-    "storage_bucket": "webrtc-hbs.appspot.com"
+    "project_number": "592882120490",
+    "project_id": "hbs-videocall",
+    "storage_bucket": "hbs-videocall.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:108563643115:android:bba74bf6e699c251c15cae",
+        "mobilesdk_app_id": "1:592882120490:android:8076117999c74f107a9053",
         "android_client_info": {
           "package_name": "com.hbs.videocall"
         }
       },
       "oauth_client": [
         {
-          "client_id": "108563643115-2ovbdcljrb4drovh2k8mvisnndn46ng6.apps.googleusercontent.com",
+          "client_id": "592882120490-5e6cbshfko5gng232c04p1eavrjqre6l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCTDYvLRfxRZknYzFzLCcL2iyyp-sEltj4"
+          "current_key": "AIzaSyAfiwYYlO9gyL29oMfTy6S1lNkkNw0GNGY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "108563643115-2ovbdcljrb4drovh2k8mvisnndn46ng6.apps.googleusercontent.com",
+              "client_id": "592882120490-5e6cbshfko5gng232c04p1eavrjqre6l.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
