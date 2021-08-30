@@ -22,7 +22,6 @@ class CallActivity : AppCompatActivity() {
     var friendUsername = ""
     var isPeerConnected = false
 
-
     var firebaseRef = Firebase.database("https://hbs-videocall-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
 
     var isAudio = true
@@ -60,6 +59,8 @@ class CallActivity : AppCompatActivity() {
             return
         }
 
+
+
         firebaseRef.child(friendUsername).child("incoming").setValue(username)
         firebaseRef.child(friendUsername).child("isAvailable").addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -73,6 +74,11 @@ class CallActivity : AppCompatActivity() {
             }
 
         })
+
+            stopCallBtn.setOnClickListener {
+            firebaseRef.child(friendUsername).child("incoming").setValue(null)
+            firebaseRef.child(friendUsername).child("isAvailable").setValue(null)
+        }
     }
 
     private fun listenForConnId() {
@@ -123,13 +129,10 @@ class CallActivity : AppCompatActivity() {
         firebaseRef.child(username).child("connId").setValue(uniqueId)
 
         callJavascriptFunction("javascript:init(\"${uniqueId}\")")
-//        firebaseRef.child(username).child("connId").setValue(uniqueId)
         firebaseRef.child(username).child("incoming").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 onCallRequest(snapshot.value as? String)
             }
-
-
 
             override fun onCancelled(error: DatabaseError) {
                 Log.d("ERROR", "Cannot read from DATABASE")
@@ -154,13 +157,15 @@ class CallActivity : AppCompatActivity() {
         }
     }
 
+//    private fun stopCall() {
+
+//    }
+
     private fun switchToController() {
         inputLayout.visibility = View.GONE
         callControlLayout.visibility = View.VISIBLE
 
     }
-
-
 
     private fun getUniqueID(): String {
         return UUID.randomUUID().toString()
@@ -185,4 +190,6 @@ class CallActivity : AppCompatActivity() {
         webView.loadUrl("about:blank")
         super.onDestroy()
     }
+
+
 }
