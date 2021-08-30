@@ -34,9 +34,6 @@ class CallActivity : AppCompatActivity() {
 
         username = intent.getStringExtra("username")!!
 
-
-
-
         callBtn.setOnClickListener {
             friendUsername = friendNameEdit.text.toString()
             sendCallRequest()
@@ -53,6 +50,7 @@ class CallActivity : AppCompatActivity() {
             callJavascriptFunction("javascript:toggleVideo(\"${isVideo}\")")
             toggleVideoBtn.setImageResource(if(isVideo) R.drawable.ic_baseline_videocam_24 else R.drawable.ic_baseline_videocam_off_24)
         }
+
         setupWebView()
     }
 
@@ -63,7 +61,6 @@ class CallActivity : AppCompatActivity() {
         }
 
         firebaseRef.child(friendUsername).child("incoming").setValue(username)
-
         firebaseRef.child(friendUsername).child("isAvailable").addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.value.toString() == "true") {
@@ -119,11 +116,12 @@ class CallActivity : AppCompatActivity() {
         }
     }
 
-
     var uniqueId = ""
 
     private fun initializePeer() {
-        uniqueId = getUniqueId()
+        uniqueId = getUniqueID()
+        firebaseRef.child(username).child("connId").setValue(uniqueId)
+
         callJavascriptFunction("javascript:init(\"${uniqueId}\")")
 //        firebaseRef.child(username).child("connId").setValue(uniqueId)
         firebaseRef.child(username).child("incoming").addValueEventListener(object : ValueEventListener {
@@ -145,7 +143,6 @@ class CallActivity : AppCompatActivity() {
         callLayout.visibility = View.VISIBLE
         incomingCallTxt.text = "$caller is calling..."
         acceptBtn.setOnClickListener {
-            firebaseRef.child(username).child("connId").setValue(uniqueId)
             firebaseRef.child(username).child("isAvailable").setValue(true)
 
             callLayout.visibility = View.GONE
@@ -165,8 +162,7 @@ class CallActivity : AppCompatActivity() {
 
 
 
-    @JvmName("getUniqueId1")
-    private fun getUniqueId(): String {
+    private fun getUniqueID(): String {
         return UUID.randomUUID().toString()
     }
 
