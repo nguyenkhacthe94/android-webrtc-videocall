@@ -58,7 +58,7 @@ function startCall(otherUserId) {
         call.on('stream', (remoteStream) => {
             remoteVideo.srcObject = remoteStream;
             remoteVideo.className = "primary-video";
-            remoteVideo.className = "secondary-video";
+            localVideo.className = "secondary-video";
         })
     })
 }
