@@ -14,9 +14,8 @@ let peer;
 
 function init(userId) {
     peer = new Peer(userId, {
-        host: '192.168.1.205',
-        port: 9000,
-        path: '/call'
+        host: '35.240.136.28',
+        port: 80
     });
 
     peer.on('open', () => {
