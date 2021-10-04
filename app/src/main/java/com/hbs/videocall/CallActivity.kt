@@ -22,7 +22,9 @@ class CallActivity : AppCompatActivity() {
     var friendUsername = ""
     var isPeerConnected = false
 
-    var firebaseRef = Firebase.database("https://hbs-videocall-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
+    var firebaseRef =
+        Firebase.database("https://hbs-videocall-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("users")
 
     var isAudio = true
     var isVideo = true
@@ -41,13 +43,13 @@ class CallActivity : AppCompatActivity() {
         toggleAudioBtn.setOnClickListener {
             isAudio = !isAudio
             callJavascriptFunction("javascript:toggleAudio(\"${isAudio}\")")
-            toggleAudioBtn.setImageResource(if(isAudio) R.drawable.ic_baseline_mic_24 else R.drawable.ic_baseline_mic_off_24)
+            toggleAudioBtn.setImageResource(if (isAudio) R.drawable.ic_baseline_mic_24 else R.drawable.ic_baseline_mic_off_24)
         }
 
         toggleVideoBtn.setOnClickListener {
             isVideo = !isVideo
             callJavascriptFunction("javascript:toggleVideo(\"${isVideo}\")")
-            toggleVideoBtn.setImageResource(if(isVideo) R.drawable.ic_baseline_videocam_24 else R.drawable.ic_baseline_videocam_off_24)
+            toggleVideoBtn.setImageResource(if (isVideo) R.drawable.ic_baseline_videocam_24 else R.drawable.ic_baseline_videocam_off_24)
         }
 
         stopCallBtn.setOnClickListener {
@@ -59,50 +61,59 @@ class CallActivity : AppCompatActivity() {
     }
 
     private fun sendCallRequest() {
-        if(!isPeerConnected) {
-            Toast.makeText(this, "Your are not connected. Please check your internet connection", Toast.LENGTH_LONG).show()
+        if (!isPeerConnected) {
+            Toast.makeText(
+                this,
+                "Your are not connected. Please check your internet connection",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
 
+        firebaseRef.child(username).child("status").setValue("onCall")
         firebaseRef.child(friendUsername).child("incoming").setValue(username)
-        firebaseRef.child(friendUsername).child("isAvailable").addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.value.toString() == "true") {
-                    listenForConnId()
+        firebaseRef.child(friendUsername).child("status").setValue("onCall")
+        firebaseRef.child(friendUsername).child("isAvailable")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.value.toString() == "true") {
+                        listenForConnId()
+                    }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("ERROR", "Cannot read from DATABASE")
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("ERROR", "Cannot read from DATABASE")
+                }
 
-        })
+            })
 
-            stopCallBtn.setOnClickListener {
+        stopCallBtn.setOnClickListener {
             firebaseRef.child(friendUsername).child("incoming").setValue(null)
             firebaseRef.child(friendUsername).child("isAvailable").setValue(null)
+            firebaseRef.child(friendUsername).child("status").setValue(null)
         }
     }
 
     private fun listenForConnId() {
-        firebaseRef.child(friendUsername).child("connId").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.value == null) {
-                    return
+        firebaseRef.child(friendUsername).child("connId")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.value == null) {
+                        return
+                    }
+                    switchToController()
+                    callJavascriptFunction("javascript:startCall(\"${snapshot.value}\")")
                 }
-                switchToController()
-                callJavascriptFunction("javascript:startCall(\"${snapshot.value}\")")
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("ERROR", "Cannot read from DATABASE")
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("ERROR", "Cannot read from DATABASE")
+                }
 
-        })
+            })
     }
 
     private fun setupWebView() {
-        webView.webChromeClient = object: WebChromeClient() {
+        webView.webChromeClient = object : WebChromeClient() {
             override fun onPermissionRequest(request: PermissionRequest?) {
                 request?.grant(request.resources)
             }
@@ -132,20 +143,21 @@ class CallActivity : AppCompatActivity() {
         firebaseRef.child(username).child("connId").setValue(uniqueId)
 
         callJavascriptFunction("javascript:init(\"${uniqueId}\")")
-        firebaseRef.child(username).child("incoming").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                onCallRequest(snapshot.value as? String)
-            }
+        firebaseRef.child(username).child("incoming")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    onCallRequest(snapshot.value as? String)
+                }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.d("ERROR", "Cannot read from DATABASE")
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("ERROR", "Cannot read from DATABASE")
+                }
 
-        })
+            })
     }
 
     private fun onCallRequest(caller: String?) {
-        if(caller == null) return
+        if (caller == null) return
         callLayout.visibility = View.VISIBLE
         incomingCallTxt.text = "$caller is calling..."
         acceptBtn.setOnClickListener {
@@ -163,11 +175,21 @@ class CallActivity : AppCompatActivity() {
     private fun stopCall() {
         callControlLayout.visibility = View.GONE
         inputLayout.visibility = View.VISIBLE
+        firebaseRef.child(username).child("status").setValue(null)
     }
 
     private fun switchToController() {
         inputLayout.visibility = View.GONE
         callControlLayout.visibility = View.VISIBLE
+        firebaseRef.child(friendUsername).child("status").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                firebaseRef.child(username).child("status").setValue(null)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("ERROR", "Cannot read from DATABASE")
+            }
+        })
 
     }
 
