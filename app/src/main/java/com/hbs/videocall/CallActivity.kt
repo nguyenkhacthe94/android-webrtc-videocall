@@ -50,6 +50,11 @@ class CallActivity : AppCompatActivity() {
             toggleVideoBtn.setImageResource(if(isVideo) R.drawable.ic_baseline_videocam_24 else R.drawable.ic_baseline_videocam_off_24)
         }
 
+        stopCallBtn.setOnClickListener {
+            callJavascriptFunction("javascript:stopCall()")
+            stopCall()
+        }
+
         setupWebView()
     }
 
@@ -58,8 +63,6 @@ class CallActivity : AppCompatActivity() {
             Toast.makeText(this, "Your are not connected. Please check your internet connection", Toast.LENGTH_LONG).show()
             return
         }
-
-
 
         firebaseRef.child(friendUsername).child("incoming").setValue(username)
         firebaseRef.child(friendUsername).child("isAvailable").addValueEventListener(object: ValueEventListener {
@@ -157,9 +160,10 @@ class CallActivity : AppCompatActivity() {
         }
     }
 
-//    private fun stopCall() {
-
-//    }
+    private fun stopCall() {
+        callControlLayout.visibility = View.GONE
+        inputLayout.visibility = View.VISIBLE
+    }
 
     private fun switchToController() {
         inputLayout.visibility = View.GONE

@@ -44,62 +44,71 @@
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
+
     <RelativeLayout
+        android:id="@+id/inputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:layout_alignParentBottom="true"
-        android:id="@+id/inputLayout">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="visible">
 
         <EditText
+            android:id="@+id/friendNameEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/friendNameEdit"
             android:layout_toStartOf="@id/callBtn"
-            android:hint="Who do you want to call?" />
+            android:hint="Who do you want to call?"
+            android:minHeight="48dp" />
 
 
         <Button
+            android:id="@+id/callBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="call"
-            android:id="@+id/callBtn"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:text="call" />
 
     </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/callControlLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="64dp"
-        android:id="@+id/callControlLayout">
+        android:gravity="center"
+        android:visibility="invisible">
 
         <ImageView
+            android:id="@+id/toggleVideoBtn"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:background="#99000000"
             android:padding="4dp"
-            android:src="@drawable/ic_baseline_videocam_24"
-            android:id="@+id/toggleVideoBtn"/>
+            android:src="@drawable/ic_baseline_videocam_24" />
 
         <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:padding="4dp"
-            android:background="#99000000"
+            android:id="@+id/stopCallBtn"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_marginStart="36dp"
+            android:background="#99000000"
+            android:padding="4dp"
+            android:src="@drawable/ic_baseline_call_end_24" />
+
+        <ImageView
             android:id="@+id/toggleAudioBtn"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="36dp"
+            android:background="#99000000"
+            android:padding="4dp"
             android:src="@drawable/ic_baseline_mic_24" />
 
-        <Button
-            android:layout_width="36dp"
-            android:layout_height="100dp"
-            android:id="@+id/stopCallBtn"
-            android:padding="4dp"
-            android:layout_marginStart="80dp"
-            />
     </LinearLayout>
 
 

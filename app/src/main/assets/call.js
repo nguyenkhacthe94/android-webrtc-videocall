@@ -72,6 +72,13 @@ function startCall(otherUserId) {
     })
 }
 
+function stopCall() {
+    localVideo.pause();
+    localVideo.currentTime = 0;
+    remoteVideo.pause();
+    remoteVideo.currentTime = 0;
+}
+
 function toggleVideo(b) {
     if(b == "true") {
         localStream.getVideoTracks()[0].enabled = true;
